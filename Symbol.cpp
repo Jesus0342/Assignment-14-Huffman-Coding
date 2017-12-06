@@ -7,7 +7,7 @@ Symbol::Symbol()
 	code = "";
 }
 
-Symbol::Symbol(char symbol, int freq, string code = "")
+Symbol::Symbol(char symbol, int freq, string code)
 {
 	c = symbol;
 	frequency = freq;

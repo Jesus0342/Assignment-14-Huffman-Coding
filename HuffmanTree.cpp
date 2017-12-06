@@ -39,7 +39,7 @@ void HuffmanTree::buildEncodingTree(vector<Symbol> &symbols)
 		// Creates a new node for top and makes its frequency the sum of its
 		// children's frequencies and makes its left and right pointers point
 		// to its left and right children.
-		top = new NodeType('$', left->freq + right->freq);
+		top = new NodeType('`', left->freq + right->freq);
 		top->left = left;
 		top->right = right;
 
@@ -61,7 +61,7 @@ void HuffmanTree::generateCodes(NodeType* root, string code, vector<Symbol> &sym
 	}
 
 	// Stores the code of the symbol.
-	if(root->data != '$')
+	if(root->data != '`')
 	{
 		symbols[getSymbolIndex(root->data, symbols)].setCode(code);
 	}

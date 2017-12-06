@@ -3,7 +3,7 @@
  * ASSIGNMENT #14 : Huffman Coding
  * CLASS          : CS1D
  * SECTION        : MW: 3:00pm
- * DUE DATE       : 11/29/2017
+ * DUE DATE       : 12/13/2017
  *****************************************************************************/
 
 #include "Symbol.h"
@@ -17,7 +17,15 @@ uint symbolExists(char symbol, vector<Symbol> symbols);
 
 int main()
 {
-	cout << "\n********************************************\n"
+	cout << "**************************************\n"
+		 << "* NAME           : Jesus Sanchez     *\n"
+		 << "* ASSIGNMENT #13 : Huffman Coding    *\n"
+		 << "* CLASS          : CS1D - MW: 3:00pm *\n"
+		 << "* DUE DATE       : 12/13/2017        *\n"
+		 <<	"**************************************\n\n"
+		 << "DESCRIPTION: \n\n";
+
+	cout << "********************************************\n"
 			"* PART A - FREQUENCY TABLE & HUFFMAN CODES *\n"
 			"********************************************\n\n";
 
@@ -58,9 +66,9 @@ int main()
 			"* PART B - ENCODING GETTYSBURG ADDRESS *\n"
 			"****************************************\n\n";
 
-	cout << "Encoding Gettysburg Address...\n";
+	cout << "Encoding Gettysburg Address...\n\n";
 
-	cout << "\n***************************************\n"
+	cout << "***************************************\n"
 			"* PART C - ENCODED GETTYSBURG ADDRESS *\n"
 			"***************************************\n\n";
 
