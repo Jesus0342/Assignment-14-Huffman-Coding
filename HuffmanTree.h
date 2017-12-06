@@ -5,10 +5,11 @@
 
 struct NodeType
 {
-	char data;              // Symbol (character, space, newline, etc.)
-	int freq;              // Frequency of the symbol
-	NodeType *left, *right; // Left and right children.
+	char data;              // Symbol
+	int freq;               // Frequency of the symbol
+	NodeType *left, *right; // Left and right children of the node.
 
+	// Overloaded constructor.
 	NodeType(char data, int freq)
 	{
 		this->data = data;
@@ -27,6 +28,13 @@ public:
 	}
 };
 
+/******************************************************************************
+ * CLASS - Huffman Tree
+ * ----------------------------------------------------------------------------
+ * This class defines a Huffman Tree that is capable of building an Encoding
+ * Tree, generating the codes for the symbols in the Encoding Tree, encoding a
+ * given text, and decoding the text.
+ *****************************************************************************/
 class HuffmanTree
 {
 public:
