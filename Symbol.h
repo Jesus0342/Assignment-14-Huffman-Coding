@@ -2,6 +2,7 @@
 #define SYMBOL_H_
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <vector>

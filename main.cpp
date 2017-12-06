@@ -17,36 +17,52 @@ uint symbolExists(char symbol, vector<Symbol> symbols);
 
 int main()
 {
+	cout << "\n********************************************\n"
+			"* PART A - FREQUENCY TABLE & HUFFMAN CODES *\n"
+			"********************************************\n\n";
+
+	// Returns the text in the file.
 	vector<char> text = getText("InFile.txt");
 
 	vector<Symbol> symbols = getSymbolFrequencies(text);
-
-	for(uint i = 0; i < text.size(); i++)
-	{
-		cout << text[i];
-	}
-
-	cout << endl;
-
-	for(uint i = 0; i < symbols.size(); i++)
-	{
-		cout << symbols[i].getSymbol() << " :" << symbols[i].getFrequency(); cout << endl;
-	}
-
-	cout << endl;
 
 	HuffmanTree test;
 
 	test.buildEncodingTree(symbols);
 
-	cout << endl;
+	// Prints the frequency table and code for each symbol in the text.
+	cout << left
+		 << setw(12) << "SYMBOL" << setw(15) << "FREQUENCY" << setw(12) << "CODE" << endl;
+	cout << setw(12) << "------" << setw(15) << "---------" << setw(12) << "----" << endl;
 
 	for(uint i = 0; i < symbols.size(); i++)
 	{
-		cout << symbols[i].getSymbol() << " :" << symbols[i].getCode(); cout << endl;
+		if(symbols[i].getSymbol() == ' ')
+		{
+			cout << setw(12) << " space";
+		}
+		else if(symbols[i].getSymbol() == '\n')
+		{
+			cout << setw(12) << "  \\n";
+		}
+		else
+		{
+			cout << "   " << setw(9) << symbols[i].getSymbol();
+		}
+
+		cout << "   " << setw(12) << symbols[i].getFrequency()
+								  << symbols[i].getCode() << endl;
 	}
 
-	cout << endl;
+	cout << "\n****************************************\n"
+			"* PART B - ENCODING GETTYSBURG ADDRESS *\n"
+			"****************************************\n\n";
+
+	cout << "Encoding Gettysburg Address...\n";
+
+	cout << "\n***************************************\n"
+			"* PART C - ENCODED GETTYSBURG ADDRESS *\n"
+			"***************************************\n\n";
 
 	return 0;
 }
