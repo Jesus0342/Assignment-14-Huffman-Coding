@@ -13,6 +13,10 @@ vector<char> getText(string fileName);
 
 vector<Symbol> getSymbolFrequencies(vector<char> text);
 
+vector<string> encodeText(vector<char> text, vector<Symbol> symbols);
+
+vector<char> decodeText(vector<string> encodedText, vector<Symbol> symbols);
+
 uint symbolExists(char symbol, vector<Symbol> symbols);
 
 int main()
@@ -32,16 +36,19 @@ int main()
 	// Returns the text in the file.
 	vector<char> text = getText("InFile.txt");
 
+	// Determines the frequency of each character in the text.
 	vector<Symbol> symbols = getSymbolFrequencies(text);
 
-	HuffmanTree test;
+	HuffmanTree huffTree;
 
-	test.buildEncodingTree(symbols);
+	huffTree.buildEncodingTree(symbols);
 
 	// Prints the frequency table and code for each symbol in the text.
 	cout << left
-		 << setw(12) << "SYMBOL" << setw(15) << "FREQUENCY" << setw(12) << "CODE" << endl;
-	cout << setw(12) << "------" << setw(15) << "---------" << setw(12) << "----" << endl;
+		 << setw(12) << "SYMBOL" << setw(15) << "FREQUENCY" << setw(12) << "CODE"
+		 << endl
+		 << setw(12) << "------" << setw(15) << "---------" << setw(12) << "----"
+		 << endl;
 
 	for(uint i = 0; i < symbols.size(); i++)
 	{
@@ -62,15 +69,105 @@ int main()
 								  << symbols[i].getCode() << endl;
 	}
 
-	cout << "\n****************************************\n"
-			"* PART B - ENCODING GETTYSBURG ADDRESS *\n"
-			"****************************************\n\n";
+	cout << "\n**************************\n"
+			"* PART B - ENCODING TEXT *\n"
+			"**************************\n\n";
 
 	cout << "Encoding Gettysburg Address...\n\n";
 
-	cout << "***************************************\n"
-			"* PART C - ENCODED GETTYSBURG ADDRESS *\n"
-			"***************************************\n\n";
+	vector<string> encodedText = encodeText(text, symbols);
+
+	cout << "*************************\n"
+			"* PART C - ENCODED TEXT *\n"
+			"*************************\n\n";
+
+	cout << "Now printing the encoded Gettysberg Address...\n";
+
+	uint i = 0;
+
+	while(i < encodedText.size())
+	{
+		string line;
+
+		uint projectedLength = 0;
+
+		while(projectedLength < 76 && i < encodedText.size())
+		{
+			if(projectedLength + encodedText[i].size() < 76)
+			{
+				line += encodedText[i];
+
+				projectedLength += encodedText[i].size();
+
+				i++;
+			}
+			else
+			{
+				projectedLength = 100;
+			}
+		}
+
+		cout << line << endl;
+	}
+
+	cout << "\n************************************\n"
+			"* PART D - DECODED COMPRESSED FILE *\n"
+			"************************************\n\n";
+
+	cout << "Now decoding the encoded Gettysberg Address...\n\n";
+
+	vector<char> decodedText = decodeText(encodedText, symbols);
+
+	uint j = 0;
+
+	while(j < decodedText.size())
+	{
+		string line;
+
+		uint projectedLength = 0;
+
+		while(projectedLength < 76 && j < decodedText.size())
+		{
+			line += decodedText[j];
+
+			if(decodedText[j] == '\n')
+			{
+				projectedLength = 100;
+			}
+			else
+			{
+				projectedLength++;
+			}
+
+			j++;
+		}
+
+		if(line.back() != '\n' && line.back() != '.' && line.back() != '!')
+		{
+			if(line.back() != ' ')
+			{
+				while(line.back() != ' ' && !line.empty())
+				{
+					line.pop_back();
+
+					j--;
+				}
+			}
+		}
+
+		if(!line.empty())
+		{
+			cout << line << endl;
+		}
+		else
+		{
+			cout << "Check ending puncutation!!\n\n";
+		}
+	}
+
+	cout << "\n******************************\n"
+			"* PART E - COMPRESSION RATIO *\n"
+			"******************************\n\n";
 
 	return 0;
 }
@@ -116,6 +213,21 @@ vector<Symbol> getSymbolFrequencies(vector<char> text)
 	return symbols;
 }
 
+vector<string> encodeText(vector<char> text, vector<Symbol> symbols)
+{
+	vector<string> encodedText;
+
+	// Huffman code of the current character.
+	string currCode;
+
+	for(uint i = 0; i < text.size(); i++)
+	{
+		encodedText.push_back(symbols[symbolExists(text[i], symbols)].getCode());
+	}
+
+	return encodedText;
+}
+
 uint symbolExists(char symbol, vector<Symbol> symbols)
 {
 	uint i = 0;
@@ -135,4 +247,32 @@ uint symbolExists(char symbol, vector<Symbol> symbols)
 	}
 
 	return i;
+}
+
+vector<char> decodeText(vector<string> encodedText, vector<Symbol> symbols)
+{
+	vector<char> decodedText;
+
+	for(uint i = 0; i < encodedText.size(); i++)
+	{
+		bool found = false;
+
+		uint j = 0;
+
+		while(j < symbols.size() && !found)
+		{
+			if(encodedText[i] == symbols[j].getCode())
+			{
+				found = true;
+			}
+			else
+			{
+				j++;
+			}
+		}
+
+		decodedText.push_back(symbols[j].getSymbol());
+	}
+
+	return decodedText;
 }
