@@ -19,15 +19,33 @@ vector<char> decodeText(vector<string> encodedText, vector<Symbol> symbols);
 
 uint symbolExists(char symbol, vector<Symbol> symbols);
 
+/******************************************************************************
+ * HUFFMAN CODING
+ * ----------------------------------------------------------------------------
+ * This program will encode the Gettysberg Address using a Huffman Coding
+ * algorithm and then decode the text by converting each code into the
+ * appropriate symbol so that the original text is reproduced. Once the encoded
+ * Gettysberg Address has been decoded, the compression ratio will be printed.
+ * ----------------------------------------------------------------------------
+ * INPUT:
+ *    <There is no input.>
+ *
+ * OUTPUT:
+ *
+ *****************************************************************************/
 int main()
 {
 	cout << "**************************************\n"
 		 << "* NAME           : Jesus Sanchez     *\n"
-		 << "* ASSIGNMENT #13 : Huffman Coding    *\n"
+		 << "* ASSIGNMENT #14 : Huffman Coding    *\n"
 		 << "* CLASS          : CS1D - MW: 3:00pm *\n"
 		 << "* DUE DATE       : 12/13/2017        *\n"
 		 <<	"**************************************\n\n"
-		 << "DESCRIPTION: \n\n";
+		 << "DESCRIPTION: This program will encode the Gettysberg Address using\n"
+		 	"a Huffman Coding algorithm and then decode the text by converting\n"
+		 	"each code into the appropriate symbol so that the original text is\n"
+		 	"reproduced. Once the encoded Gettysberg Address has been decoded,\n"
+		 	"the compression ratio will be printed. \n\n";
 
 	cout << "********************************************\n"
 			"* PART A - FREQUENCY TABLE & HUFFMAN CODES *\n"
@@ -168,6 +186,25 @@ int main()
 	cout << "\n******************************\n"
 			"* PART E - COMPRESSION RATIO *\n"
 			"******************************\n\n";
+
+	double compressionRatio = 0.0;
+
+	// Finds the compressed length of the text.
+	for(uint i = 0; i < symbols.size(); i++)
+	{
+		compressionRatio += (symbols[i].getFrequency() * symbols[i].getCode().size());
+	}
+
+	// Divides by 8 to store the number of bytes in the compressed text.
+	compressionRatio /= 8.0;
+
+	// Divides the number of bytes by the number of symbols in the text to
+	// get the compression ratio.
+	compressionRatio /= double(text.size());
+
+	// Prints the compression ratio to 2 decimal places.
+	cout << fixed << setprecision(2)
+		 << "Compression Ratio = " << compressionRatio * 100 << "%";
 
 	return 0;
 }
