@@ -12,6 +12,8 @@ using namespace std;
 // Redefines the unsigned int type to uint.
 typedef unsigned int uint;
 
+const int BOUND = 76;
+
 /******************************************************************************
  * CLASS - Symbol
  * ----------------------------------------------------------------------------

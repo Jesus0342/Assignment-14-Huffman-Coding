@@ -6,18 +6,8 @@
  * DUE DATE       : 12/13/2017
  *****************************************************************************/
 
-#include "Symbol.h"
+#include "Header.h"
 #include "HuffmanTree.h"
-
-vector<char> getText(string fileName);
-
-vector<Symbol> getSymbolFrequencies(vector<char> text);
-
-vector<string> encodeText(vector<char> text, vector<Symbol> symbols);
-
-vector<char> decodeText(vector<string> encodedText, vector<Symbol> symbols);
-
-uint symbolExists(char symbol, vector<Symbol> symbols);
 
 /******************************************************************************
  * HUFFMAN CODING
@@ -31,7 +21,11 @@ uint symbolExists(char symbol, vector<Symbol> symbols);
  *    <There is no input.>
  *
  * OUTPUT:
- *
+ *    - Frequency Table
+ *    - Huffman Codes
+ *    - Encoded Text
+ *    - Decoded Text
+ *    - Compression Ratio
  *****************************************************************************/
 int main()
 {
@@ -47,9 +41,9 @@ int main()
 		 	"reproduced. Once the encoded Gettysberg Address has been decoded,\n"
 		 	"the compression ratio will be printed. \n\n";
 
-	cout << "********************************************\n"
-			"* PART A - FREQUENCY TABLE & HUFFMAN CODES *\n"
-			"********************************************\n\n";
+	cout << "**********\n"
+			"* PART A *\n"
+			"**********\n\n";
 
 	// Returns the text in the file.
 	vector<char> text = getText("InFile.txt");
@@ -60,6 +54,8 @@ int main()
 	HuffmanTree huffTree;
 
 	huffTree.buildEncodingTree(symbols);
+
+	cout << "Printing the frequency table and Huffman Codes for the symbols.\n\n";
 
 	// Prints the frequency table and code for each symbol in the text.
 	cout << left
@@ -87,105 +83,130 @@ int main()
 								  << symbols[i].getCode() << endl;
 	}
 
-	cout << "\n**************************\n"
-			"* PART B - ENCODING TEXT *\n"
-			"**************************\n\n";
+	cout << "\n**********\n"
+			"* PART B *\n"
+			"**********\n\n";
 
 	cout << "Encoding Gettysburg Address...\n\n";
 
 	vector<string> encodedText = encodeText(text, symbols);
 
-	cout << "*************************\n"
-			"* PART C - ENCODED TEXT *\n"
-			"*************************\n\n";
+	cout << "**********\n"
+			"* PART C *\n"
+			"**********\n\n";
 
-	cout << "Now printing the encoded Gettysberg Address...\n";
+	cout << "Printing the encoded Gettysberg Address...\n\n";
 
 	uint i = 0;
 
+	// Prints the encoded text while ensuring that the maximum length of any line
+	// is no greater than the bound (76).
 	while(i < encodedText.size())
 	{
 		string line;
 
-		uint projectedLength = 0;
+		uint length = 0;
 
-		while(projectedLength < 76 && i < encodedText.size())
+		// Adds the codes to the current line of the encoded text.
+		while(length < BOUND && i < encodedText.size())
 		{
-			if(projectedLength + encodedText[i].size() < 76)
+			// Checks to see if adding the next code to the current line of text
+			// will cause the length of the line to exceed the bound.
+			if(length + encodedText[i].size() < BOUND)
 			{
+				// Adds the code to the current line.
 				line += encodedText[i];
 
-				projectedLength += encodedText[i].size();
+				// Accumulates length to store the new size of the line.
+				length += encodedText[i].size();
 
+				// Increments i to the next index in encodedText.
 				i++;
 			}
 			else
 			{
-				projectedLength = 100;
+				// Assigns 100 to length to indicate that adding the next code
+				// to the current line will exceed the bound.
+				length = 100;
 			}
 		}
 
+		// Prints the line of encoded text.
 		cout << line << endl;
 	}
 
-	cout << "\n************************************\n"
-			"* PART D - DECODED COMPRESSED FILE *\n"
-			"************************************\n\n";
+	cout << "\n**********\n"
+			"* PART D *\n"
+			"**********\n\n";
 
 	cout << "Now decoding the encoded Gettysberg Address...\n\n";
 
+	// Decodes the text and stores the decoded symbols in a vector of characters.
 	vector<char> decodedText = decodeText(encodedText, symbols);
 
 	uint j = 0;
 
+	// Prints the decoded text while ensuring that the length of any line does
+	// not exceed the bound.
 	while(j < decodedText.size())
 	{
 		string line;
 
-		uint projectedLength = 0;
+		uint length = 0;
 
-		while(projectedLength < 76 && j < decodedText.size())
+		// Adds characters to the line until a newline is reached or a space is
+		// reached and adding the word before the previous space has exceeded
+		// the bound.
+		while(length < BOUND && j < decodedText.size())
 		{
 			line += decodedText[j];
 
+			// Checks if the last symbol added was a new line.
 			if(decodedText[j] == '\n')
 			{
-				projectedLength = 100;
+				// Exits to signify that the paragraph ends here.
+				length = 100;
 			}
 			else
 			{
-				projectedLength++;
+				// Increments length and continues the loop.
+				length++;
 			}
 
+			// Increments j to the next symbol in the decodedText vector.
 			j++;
 		}
 
+		// If last symbol in the line is not a newline or a punctuation mark,
+		// checks if the last symbol is a space.
 		if(line.back() != '\n' && line.back() != '.' && line.back() != '!')
 		{
+			// If the last symbol is not a space, removes the last symbol from
+			// the line until it is a space since the bound was exceeded and the
+			// entire word may not have been stored in the line.
 			if(line.back() != ' ')
 			{
 				while(line.back() != ' ' && !line.empty())
 				{
 					line.pop_back();
 
+					// Decrements j to start at the beginning of the word that
+					// was just removed from the line in the next loop iteration.
 					j--;
 				}
 			}
 		}
 
+		// Prints the line if it is not empty.
 		if(!line.empty())
 		{
 			cout << line << endl;
 		}
-		else
-		{
-			cout << "Check ending puncutation!!\n\n";
-		}
 	}
 
-	cout << "\n******************************\n"
-			"* PART E - COMPRESSION RATIO *\n"
-			"******************************\n\n";
+	cout << "\n**********\n"
+			"* PART E *\n"
+			"**********\n\n";
 
 	double compressionRatio = 0.0;
 
@@ -207,109 +228,4 @@ int main()
 		 << "Compression Ratio = " << compressionRatio * 100 << "%";
 
 	return 0;
-}
-
-vector<char> getText(string fileName)
-{
-	vector<char> text;
-
-	char symbol;
-
-	ifstream fin;
-
-	fin.open(fileName.c_str());
-
-	while(fin.get(symbol))
-	{
-		text.push_back(symbol);
-	}
-
-	return text;
-}
-
-vector<Symbol> getSymbolFrequencies(vector<char> text)
-{
-	vector<Symbol> symbols;
-
-	for(uint i = 0; i < text.size(); i++)
-	{
-		uint symIndex = symbolExists(text[i], symbols);
-
-		if(symIndex >= symbols.size())
-		{
-			Symbol temp(text[i], 1, "");
-
-			symbols.push_back(temp);
-		}
-		else
-		{
-			symbols[symIndex]++;
-		}
-	}
-
-	return symbols;
-}
-
-vector<string> encodeText(vector<char> text, vector<Symbol> symbols)
-{
-	vector<string> encodedText;
-
-	// Huffman code of the current character.
-	string currCode;
-
-	for(uint i = 0; i < text.size(); i++)
-	{
-		encodedText.push_back(symbols[symbolExists(text[i], symbols)].getCode());
-	}
-
-	return encodedText;
-}
-
-uint symbolExists(char symbol, vector<Symbol> symbols)
-{
-	uint i = 0;
-
-	bool found = false;
-
-	while(i < symbols.size() && !found)
-	{
-		if(symbols[i].getSymbol() == symbol)
-		{
-			found = true;
-		}
-		else
-		{
-			i++;
-		}
-	}
-
-	return i;
-}
-
-vector<char> decodeText(vector<string> encodedText, vector<Symbol> symbols)
-{
-	vector<char> decodedText;
-
-	for(uint i = 0; i < encodedText.size(); i++)
-	{
-		bool found = false;
-
-		uint j = 0;
-
-		while(j < symbols.size() && !found)
-		{
-			if(encodedText[i] == symbols[j].getCode())
-			{
-				found = true;
-			}
-			else
-			{
-				j++;
-			}
-		}
-
-		decodedText.push_back(symbols[j].getSymbol());
-	}
-
-	return decodedText;
 }

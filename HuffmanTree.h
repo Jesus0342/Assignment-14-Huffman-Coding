@@ -19,6 +19,12 @@ struct NodeType
 	}
 };
 
+/******************************************************************************
+ * COMPARATOR CLASS - CompareFrequency
+ * ----------------------------------------------------------------------------
+ * This class is used to store the symbols in the Symbols vector in the priority
+ * queue in ascending order.
+ *****************************************************************************/
 class CompareFrequency
 {
 public:
@@ -38,12 +44,34 @@ public:
 class HuffmanTree
 {
 public:
+	// Default constructor.
 	HuffmanTree();
+
+	// Destructor.
 	~HuffmanTree();
+
+	// Builds the encoding tree using the symbols stored in the Symbol vector
+	// and generates their Huffman Codes.
+	// PRE-CONDITION:
+	// symbols - Vector of symbols with their frequencies must be defined.
+	// POST-CONDITION:
+	// The Huffman Codes for each of the symbols will be stored.
 	void buildEncodingTree(vector<Symbol> &symbols);
+
+	// Recursively generates the codes for each of the symbols in the symbol vector.
+	// PRE-CONDITIONS:
+	// root - Pointer to the current node in the Huffman Tree.
+	// code - Huffman Code of the symbol.
+	// symbols - Vector of symbols.
+	// POST-CONDITION:
+	// Stores the Huffman Code for each symbol.
 	void generateCodes(NodeType* root, string code, vector<Symbol> &symbols);
 
 private:
+	// Returns the index of the symbol being searched for.
+	// PRE-CONDITIONS:
+	// symbol - Symbol to be searched for.
+	// symbols - Vector of symbols.
 	uint getSymbolIndex(char symbol, vector<Symbol> symbols);
 };
 
